@@ -1,6 +1,6 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
-import { Form } from "../src/Form";
+import { Form } from "./components/Form";
 
 const GlobalStyle = createGlobalStyle`
   * {

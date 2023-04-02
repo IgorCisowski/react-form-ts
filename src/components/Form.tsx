@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Checkbox } from "./Checkbox";
-import { Heading } from "./Heading";
-import { Submit } from "./Submit";
-import { Username } from "./Username";
-import { Email } from "./Email";
+import { Checkbox } from "../components/Checkbox";
+import { Heading } from "../components/Heading";
+import { Submit } from "../components/Submit";
+import { Username } from "../components/Username";
+import { Email } from "../components/Email";
 
 type Props = {
   submitted: boolean;
