@@ -1,5 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { Checkbox } from "./Checkbox";
+import { Heading } from "./Heading";
+import { Submit } from "./Submit";
+import { Username } from "./Username";
+import { Email } from "./Email";
+
+type Props = {
+  submitted: boolean;
+};
 
 const Main = styled.div`
   display: flex;
@@ -23,8 +32,8 @@ const Container = styled.div`
   padding: 0 30px;
 `;
 
-const StyledForm = styled.form`
-  display: flex;
+const StyledForm = styled.form<Props>`
+  display: ${({ submitted }) => (submitted ? "none" : "flex")};
   flex-direction: column;
   padding: 65px 55px 55px;
   border-radius: 20px;
@@ -35,110 +44,91 @@ const StyledForm = styled.form`
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
 `;
-// ===================================
-const Heading = styled.h1`
-  text-align: center;
-  font-family: "Poppins", sans-serif;
-  font-weight: bold;
-  padding-bottom: 50px;
-  color: white;
-  letter-spacing: 0.5px;
-  font-size: 40px;
-`;
-// ===================================
-const InputWrapper = styled.div`
+
+const SubmitConfirmation = styled.div`
   display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-
-  &:nth-of-type(1) {
-    margin-bottom: 25px;
-  }
-`;
-
-const Label = styled.label`
-  padding-bottom: 15px;
+  justify-content: center;
+  align-items: center;
   color: white;
-  font-size: 14px;
-  letter-spacing: 0.7px;
-`;
-
-const Input = styled.input`
-  padding-bottom: 10px;
-  background-color: transparent;
-  border: none;
-  border-bottom: 2px solid white;
-  outline: none;
-  font-size: 17px;
-  color: white;
-`;
-// ===================================
-const CheckboxWrapper = styled.div`
-  display: flex;
-  gap: 10px;
-  color: white;
-  margin-bottom: 25px;
-`;
-
-const AcceptTerms = styled.input``;
-
-const Note = styled.p``;
-// ===================================
-const LoginButton = styled.button`
-  position: relative;
-  overflow: hidden;
-  z-index: 2;
-  cursor: pointer;
-  padding: 15px 20px;
-  font-size: 16px;
-  text-transform: uppercase;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 30px;
-
-  &::after {
-    content: "";
-    width: 500px;
-    height: 100%;
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: -25%;
-    background: linear-gradient(
-      107deg,
-      rgba(13, 109, 140, 1) 30%,
-      rgba(35, 39, 47, 1) 100%
-    );
-    transition: 0.3s ease-in;
-  }
-
-  &:hover:after {
-    left: 0%;
-  }
+  font-size: 24px;
+  border-radius: 20px;
+  padding: 55px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  width: 500px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
 `;
 
 export const Form = () => {
+  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
+  const [check, setCheck] = useState(false);
+  const [userError, setUserError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [checkError, setCheckError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (user === "") {
+      setUserError("Please enter your UserName.");
+    } else {
+      setUserError("");
+    }
+
+    if (email === "") {
+      setEmailError("Please enter your email.");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError("Please enter a valid email");
+    } else {
+      setEmailError("");
+    }
+
+    if (check === false) {
+      setCheckError("You must accept");
+    } else {
+      setCheckError("");
+    }
+
+    if (user !== "" && email !== "" && check === true) {
+      setCheck(false);
+      setEmail("");
+      setSubmitted(true);
+    }
+  };
+
+  if (submitted) {
+    // return <div>Thank you for submitting the form!</div>;
+  }
+
   return (
     <Main>
       <Container>
-        <StyledForm onClick={(e) => e.preventDefault()}>
-          <Heading>Newsletter</Heading>
-          <InputWrapper>
-            <Label>Username</Label>
-            <Input type={"text"}></Input>
-          </InputWrapper>
-          <InputWrapper>
-            <Label>Email</Label>
-            <Input type={"email"}></Input>
-          </InputWrapper>
-
-          <CheckboxWrapper>
-            <AcceptTerms type={"checkbox"}></AcceptTerms>
-            <Note>I agree to the Terms</Note>
-          </CheckboxWrapper>
-
-          <LoginButton type={"submit"}>sumbit</LoginButton>
+        <StyledForm onSubmit={handleSubmit} submitted={submitted}>
+          <Heading />
+          <Username user={user} setUser={setUser} userError={userError} />
+          <Email email={email} setEmail={setEmail} emailError={emailError} />
+          <Checkbox check={check} setCheck={setCheck} checkError={checkError} />
+          <Submit />
         </StyledForm>
+        {submitted && (
+          <SubmitConfirmation>
+            Thanks for registering {user}
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              stroke-width="0"
+              viewBox="0 0 512 512"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M431.76 256c-69 42.24-137.27 126.89-175.76 224.78C217.51 382.89 149.25 298.24 80.24 256c69-42.24 137.27-126.89 175.76-224.78C294.49 129.11 362.75 213.76 431.76 256z"></path>
+            </svg>
+          </SubmitConfirmation>
+        )}
       </Container>
     </Main>
   );
