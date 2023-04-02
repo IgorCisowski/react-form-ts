@@ -1,4 +1,4 @@
-I created a form where I implemented input validation options.
+I've developed a form where I implemented input validation options.
 
 Tech stack: React, Styled Components, TypeScript 
 
