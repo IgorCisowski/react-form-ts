@@ -99,10 +99,6 @@ export const Form = () => {
     }
   };
 
-  if (submitted) {
-    // return <div>Thank you for submitting the form!</div>;
-  }
-
   return (
     <Main>
       <Container>
